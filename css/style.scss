@@ -1,0 +1,530 @@
+$primary-bg-color: #2A313B;
+$primary-highlight-color: #FF5A5A;
+$primary-highlight-color: red;
+
+.cl-effect-4 {
+	display: inline-block;
+	text-align:center;
+}
+.cl-effect-4 a {
+	padding: 0 0 3px;
+	position: relative;
+}
+.cl-effect-4 a:hover {
+	text-decoration: none;
+}
+
+.cl-effect-4 a::after {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 98%;
+	height: 1px;
+	background: #000;
+	content: '';
+	opacity: 0;
+	-webkit-transition: height 0.2s, opacity 0.2s, -webkit-transform 0.2s;
+	-moz-transition: height 0.2s, opacity 0.2s, -moz-transform 0.2s;
+	transition: height 0.2s, opacity 0.2s, transform 0.2s;
+	-webkit-transform: translateY(-10px);
+	-moz-transform: translateY(-10px);
+	transform: translateY(-10px);
+}
+
+.cl-effect-4 a:hover::after,
+.cl-effect-4 a:focus::after {
+	height: 2px;
+	opacity: 1;
+	-webkit-transform: translateY(0px);
+	-moz-transform: translateY(0px);
+	transform: translateY(0px);
+}
+a:hover,
+a:focus {
+	outline: none;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+}
+#alerts {
+	position: fixed;
+	top: 0px;
+	width: 60%;
+	left: 20%;
+	padding-top: 20px;
+	z-index: 100;
+	
+}
+#menu {
+        position: fixed;
+         top: 0;
+         bottom: 0;
+         width: 480px;
+         right: -480px;
+         height: 100%;
+         -webkit-transform: translate(0px, 0px);
+        -moz-transform: translate(0px, 0px);
+        -o-transform: translate(0px, 0px);
+        -ms-transform: translate(0px, 0px);
+        transform: translate(0px, 0px);
+        background: $primary-bg-color;
+   }
+
+#menu.active {
+        -webkit-transform: translate(-13.755em, 0px);
+        -moz-transform: translate(-13.755em, 0px);
+        -o-transform: translate(-13.755em, 0px);
+        -ms-transform: translate(-13.755em, 0px);
+        transform: translate(-13.755em, 0px);
+}
+.menu-link {
+      position: absolute;
+      top: 15px;
+      left: -50px;
+}
+
+#site {
+       -webkit-transform: translateX(0px);
+       -moz-transform: translateX(0px);
+       -o-transform: translateX(0px);
+       -ms-transform: translateX(0px);
+       transform: translateX(0px);
+
+}
+
+#site.active {
+       -webkit-transform: translate(X-13.725em);
+       -moz-transform: translateX(-13.725em);
+       -o-transform: translateX(-13.725em);
+       -ms-transform: translateX(-13.725em);
+       transform: translateX(-13.725em)!important;
+}
+
+#user-meta {
+	position: fixed;
+	top: 20px;
+	left: 25px;
+	color: #BBBBBB;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	z-index: 10;
+}
+#user-meta a {
+	color: black;
+}
+
+
+.toggle-nav {
+	position: absolute;
+	left: -25px;
+	top: 10px;
+	font-size: 20px;
+	color: black;
+}
+#footer-player {
+	height: 70px;
+	position: fixed;
+	bottom: 0px;
+	z-index: 1;
+	background: white;
+	width: 100%;
+	-webkit-transform: translate(0px, 0px);
+       -moz-transform: translate(0px, 0px);
+       -o-transform: translate(0px, 0px);
+       -ms-transform: translate(0px, 0px);
+       transform: translate(0px, 0px);
+       border-top: 3px solid rgba(0,0,0,0.04);
+     line-height: 70px;
+}
+#footer-player .player_wrapper {
+	display: inline-block;
+	width: auto;
+}
+#footer-player .random, #footer-player .repeat {
+	font-size: 20px;
+	color: #BBBBBB;
+	float: left;
+	margin: 0 8px;
+	cursor: pointer;
+}
+#footer-player .random.active, #footer-player .repeat.active {
+	color: $primary-bg-color;
+}
+#footer-player .backward:hover, #footer-player .forward:hover, #footer-player .play:hover {
+	background: black;
+	color: white;
+}
+#footer-player .backward, #footer-player .forward, #footer-player .play {
+	float: left;
+	width: 37px;
+	height: 37px;
+	border-radius: 37px;
+	text-align: center;
+	border: 2px solid black;
+	display: inline-block;
+	line-height: 34px;
+	margin: 0px 4px;
+	margin-top: 16px;
+	cursor: pointer;
+}
+#footer-player .play {
+	width: 42px;
+	height: 42px;
+	line-height: 38px;
+	font-size: 18px;
+	margin-top: 13px;
+}
+#footer-player .play i {
+margin-left: 4px; 
+}
+#footer-player .play i.fa-pause {
+margin-left: 0px; 
+}
+#footer-player .backward i {
+	margin-left: -4px;
+}
+#footer-player .forward i {
+	margin-left: 4px;
+}
+#footer-player.active {
+	-webkit-transform: translate(0px, 70px);
+       -moz-transform: translate(0px, 70px);
+       -o-transform: translate(0px, 70px);
+       -ms-transform: translate(0px, 70px);
+       transform: translate(0px, 70px);
+}
+#footer-player .player-pos {
+	position: absolute;
+	top: -2px;
+	height: 2px;
+	width: 60%;
+	background: black;
+}
+#footer-player .player-pos-dot {
+	position: absolute;
+	right: 0px;
+	top: -5px;
+	width: 12px;
+	height: 12px;
+	background: black;
+	border-radius: 10px;
+	border: 2px solid white;
+}
+#footer-player .player-pos-time {
+	position: absolute;
+	right: -5px;
+	top: -50px;
+	opacity: 0;
+}
+#footer-player .player-pos:hover .player-pos-time {
+	opacity: 1;
+}
+.animate {
+	 -webkit-transition: 0.25s ease-out;
+       -moz-transition: 0.25s ease-out;
+       -o-transition: 0.25s ease-out;
+       transition: 0.25s ease-out;   
+}
+.timeline .line {	
+	border-left: 3px solid #F2F2F2;
+	z-index: 20;
+	height: 100%;
+}
+#site {
+	position: relative;
+	height: 100%;
+}
+.song, .add-song {
+	margin: 15px 0;
+	float: left;
+	position: relative;
+	background: transparent;
+	width: 100%;
+}
+.song.first {
+	margin-top: 50px;
+}
+.song.last {
+	margin-bottom: 100px;
+}
+.song .meta_left {
+	text-align: right;
+	float: left;
+	background: transparent;
+	width: 200px;
+	position: absolute;
+	left: -195px;
+	
+}
+.song .meta_left p.zero {
+	opacity: 0;
+	display: block;
+}
+.song .meta_left p {
+	position: relative;
+	right: 12px;
+	letter-spacing: 0.08em;
+	color: #BBBBBB;
+	
+	margin-top: 10px;
+	font-size: 14px;
+	line-height: 8px;
+}
+.song .meta_left p.now-playing {
+	margin-top: 16px;
+	color: black;
+	text-transform: uppercase;
+	font-weight: bold;font-size: 12px;
+	letter-spacing: 0.15em;
+}
+.song .meta_left p.time {
+	color: #D8D8D8;
+}
+.song .avatar {
+	float: right;
+	width: 44px;
+	height: 44px;
+	border-radius: 44px;
+	overflow: hidden;
+	border: 2px solid white;
+	margin-top: 25px;
+}
+.song .song-right {
+	float: left;
+	position: relative;
+	left: 23px;
+	top: 0px;
+	width: 100%;
+}
+.song .song-right img {
+	float: left;
+	width: 110px;
+	height: 110px;
+}
+.song .song-right .title {
+	color: black;
+	font-size: 18px;
+	font-weight: 300;
+	text-align: left;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding: 0px;
+	letter-spacing: 0.05em;
+	float: left;
+	width: 70%;
+	margin-bottom: 0px;
+	clear: none;
+	cursor: pointer;
+}
+.song.playing .song-right .title {
+	font-weight: normal;
+}
+
+.song .song-right .artist, .song .song-right .time {
+	color: #979797;
+	font-size: 16px;
+	font-weight: normal;
+	text-align: left;
+	margin-left: 20px;
+	margin-top: 6px;
+	margin-bottom: 0px;
+	padding: 0px;
+	letter-spacing: 0.05em;
+	float: left;
+	clear: none;
+	width: 70%;
+}
+.song .song-right .time i {
+	margin-right: 5px;
+}
+.add-song {
+	height: 110px;
+	margin-bottom: 100px;
+}
+.add-song .fake-avatar {
+	position: absolute;
+	width: 44px;
+	left: -40px;
+	height: 44px;
+	border-radius: 44px;
+	overflow: hidden;
+	border: 2px solid white;
+	background: #F2F2F2;
+	line-height: 40px;
+	color: #979797;
+	
+}
+.add-song .fake-cover {
+	float: left;
+	left: 23px;
+	position: relative;
+	width: 110px;
+	height: 110px;
+	text-align: center;
+	background: #F2F2F2;
+	line-height: 120px;
+	font-size: 50px;
+	color: #DADADA;
+}
+.add-song input {
+	float: left;
+	width: 100%;
+	margin-left: 40px;
+	margin-top: 15px;
+	height: 35px;
+	border: 2px solid #F2F2F2;
+	color: #D8D8D8;
+}
+.add-song form {
+	float: left;
+}
+.add-song .btn {
+	float: left;
+	clear: both;
+	margin-top: 10px;
+	background: #F2F2F2;
+	color: #979797;
+	margin-left: 40px;
+	height: 35px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	font-size: 12px;
+	line-height: 20px;
+	border: 2px solid #F2F2F2;
+}
+.add-song .btn .fa {
+	margin-right: 5px;
+	
+}
+.add-song .btn:hover {
+	border: 2px solid #1C232D;
+	color: #1C232D;
+}
+
+/** MODALS **/
+.modal-login {
+	width: 400px;
+}
+.modal-content {
+	border-radius: 0px;
+	border: 0px;
+	box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+}
+.modal-backdrop.in {
+	filter: alpha(opacity=80);
+	opacity: .8;
+}
+.modal-title {
+	text-transform: uppercase;
+	font-weight: 300;
+	text-align: center;
+	margin-top: 20px;
+}
+.modal-header {
+	padding: 20px;
+	border: 0px;
+	padding-bottom: 10px;
+}
+.modal-body {
+	padding: 30px 50px 30px 50px;
+}
+.modal-sm .modal-body {
+	padding: 30px;
+}
+@media (min-width: 768px) {
+.modal-content {
+-webkit-box-shadow: none !important;
+box-shadow: none !important;;
+}
+}
+
+/* FORMS */ 
+.form-control {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 300;
+    border-color: rgba(0,0,0,0.2)
+}
+.modal-form .form-control {
+	    padding-left: 42px;
+}
+
+.form-control:focus {
+	border-color: rgba(0,0,0,1);
+	outline: 0;
+	-webkit-box-shadow: none;
+	box-shadow: inset none;
+	color: black;
+}
+
+.form-control + .glyphicon, .form-control + .fa {
+    position: absolute;
+    left: 0;
+    font-size: 16px;
+    padding-top: 16px;
+    padding-left: 35px;
+    padding-bottom: 16px;
+    color: silver;
+}
+.form-control + .fa {
+top: 0px;
+padding: 10px 27px;
+}
+
+/** BUTTONS **/
+.btn-default {
+	border: 2px solid black;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	/* width: 100%; */
+	margin-bottom: 10px;
+}
+
+
+/* FORMS */ 
+.form-control {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 300;
+    border-color: rgba(0,0,0,0.2)
+}
+.modal-form .form-control {
+	    padding-left: 42px;
+}
+
+.form-control:focus {
+	border-color: rgba(0,0,0,1);
+	outline: 0;
+	-webkit-box-shadow: none;
+	box-shadow: inset none;
+	color: black;
+}
+
+.form-control + .glyphicon, .form-control + .fa {
+    position: absolute;
+    left: 0;
+    font-size: 16px;
+    padding-top: 16px;
+    padding-left: 35px;
+    padding-bottom: 16px;
+    color: silver;
+}
+.form-control + .fa {
+top: 0px;
+padding: 10px 27px;
+}
+
+/** BUTTONS **/
+.btn-default {
+	border: 2px solid black;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	/* width: 100%; */
+	margin-bottom: 10px;
+}

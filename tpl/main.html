@@ -1,0 +1,81 @@
+<div id="alerts" ng-show="alerts.length > 0">
+	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+<div id="user-meta" class="cl-effect-4">
+	<span ng-show="!user">
+		<a href="" ng-click="openModalLogin()">Login</a> or <a href="#" >Register</a>
+	</span>
+	<div ng-show="user">
+		Welcome {{user.user_login}}
+	</div>
+</div>
+<div id="site" class="container animate text-center" ng-class="{active: sidebar}">
+  <div class="timeline row animate" ng-style="timelineStyle">
+  	<div class="line col-md-8 col-md-offset-4 col-sm-10 col-sm-offset-2">
+	  	<div class="song" ng-repeat="(key,song) in songs" scroll-if="song.playing" ng-class="{first: key == 0, playing: song.playing, last: key == songs.length -1 && !user}">
+	  		<div class="meta_left"  ng-show="((songs[key - 1].username != song.username) || song.playing)">
+		  		<img src="{{ song.avatar }}" class="avatar" />
+		  		<p class="now-playing" ng-class="{zero: !song.playing}">
+		  		Now <span ng-show="playing">Playing</span><span ng-show="!playing">Paused</span>
+		  		</p>
+		  		<p class="user">
+		  		{{ song.username }}
+		  		</p>
+		  		<p class="time">
+		  		{{ song.posted | timeago }}
+		  		</p>
+	  		</div>
+	  		<div class="song-right">
+	  			<div class="cover">
+	  				<img src="{{ song.cover }}"  />
+	  			</div>
+	  			<h3 class="title" ng-dblclick="play(key,true)" ng-click="play(key)" >{{ song.title }}</h3>
+	  			<h4 class="artist">{{ song.artist }}</h4>
+	  			<h4 class="time"><i class="fa fa-clock-o"></i>{{ song.duration | unix }}</h4>
+	  		</div>
+	  	</div>
+	  	<div class="add-song" ng-show="user">
+		  	<div class="fake-avatar"><div class="fa fa-plus"></div></div>
+		  	<div class="fake-cover"><div class="glyphicon glyphicon-music"></div></div>
+		  	<form novalidate role="form" name="addSongForm">
+		  		<input type="text" name="songUrl" ng-model="newSong.url" class="add-song-input form-control animate" placeholder="http://" required>
+		  		<button type"submit" ng-disabled="addSongForm.$invalid" class="btn btn-add-song" ng-click="addSongBtn()"><i class="fa fa-plus"></i>Add Song</button>
+		  	</form>
+	  	</div>
+  	</div>
+  </div><!-- /.timeline -->
+</div><!-- /.container -->
+ <div id="menu" class="animate" ng-class="{active: sidebar}">
+ 	<div class="row">
+  	<div class="col-md-12 sidebar-offcanvas" id="sidebar" role="navigation">  
+          <a class="toggle-nav" ng-click="toggleSidebar()"><i class="fa fa-bars"></i></a>
+          <div class="list-group">
+            <a href="#" class="list-group-item active">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+          </div>
+      </div>
+ 	</div>
+  </div>
+  
+  
+  <div id="footer-player" class="text-center animate" ng-class="{active: sidebar}">
+  		<div class="player-pos animate" ng-style="positionStyle">
+  			<div class="player-pos-dot"></div>
+  			<div class="player-pos-time">{{ outputTime }}</div>
+  		</div>
+  		<span class="player_wrapper">
+	  		<div class="random" ng-click="toggleRandom()" ng-class="{active: random}"><i class="fa fa-random"></i></div>
+	  		<div  class="backward" ng-click="prevSong()"><i class="fa fa-backward"></i></div>
+	  		<div  class="play" ng-click="togglePlaying()"><i class="fa" ng-class="{'fa-pause': playing, 'fa-play': !playing}"></i></div>
+	  		<div  class="forward" ng-click="nextSong()"><i class="fa fa-forward"></i></div>
+	  		<div class="repeat" ng-click="toggleRepeat()" ng-class="{active: repeat}"><i class="fa fa-repeat"></i></div>
+  		</span>
+  </div>
