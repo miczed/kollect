@@ -49,7 +49,7 @@ Array.prototype.remove = function(from, to) {
 kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$http,$routeParams, smoothScroll,$modal,$cookies) {
     
     $scope.soundcloud = true; //Debug Variable, falls Soundcloud Down ist
-    $scope.sidebar = false; //Sidebar aktiv oder nicht
+    $scope.sidebar = true; //Sidebar aktiv oder nicht
     $scope.random = false; //Shuffle Modus aktiv oder nicht
     $scope.repeat = false; //Repeat Modus aktiv oder nicht
     $scope.playing = false; //Abspielen oder nicht
@@ -64,6 +64,8 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
     $scope.time = 0; //Position des aktuellen Songs in Millisekunden
 	$scope.user = false //Aktuell eingeloggter Benutzer
 	$scope.newSong = {}; 
+	$scope.playlist = {};
+	$scope.collectors = {};
 	$scope.alerts = Array();
 	if(!$routeParams.playlistKey) {
 		$routeParams.playlistKey = "test";
@@ -81,6 +83,9 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
    }
     
 	$http.get('api/playlists/' + $routeParams.playlistKey).success(function(data) {
+    	$scope.playlist.title = data.title;
+    	$scope.collectors = data.collectors;
+    	$scope.playlist.key = data.unique_key;
     	$scope.originalSongs = data.songs;
 		$scope.songs = data.songs;
 		$scope.orderNormal(); 
@@ -166,6 +171,7 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
     	$scope.loadedId = value;
     	console.log("Playing Song #" + value);
 	    $scope.songs[value].playing = true;
+	    $scope.track = $scope.songs[value];
 	    $scope.timelinescroll = value * 140;
 	    smoothScroll.scrollTo($scope.timelinescroll);
 	    $scope.loadSC($scope.songs[value]['sc_id']);
