@@ -1,15 +1,12 @@
 <div id="alerts" ng-show="alerts.length > 0">
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 </div>
-<div id="user-meta" class="cl-effect-4">
+<div id="user-meta" class="cl-effect-4" ng-show="!user">
 	<span ng-show="!user">
 		<a href="" ng-click="openModalLogin()">Login</a> or <a href="#" >Register</a>
 	</span>
-	<div ng-show="user">
-		Welcome {{user.user_login}}
-	</div>
 </div>
-<div id="site" class="container animate text-center" ng-class="{active: sidebar}">
+<div id="site" class="container animate text-center" ng-class="{active_left: sidebar, active_right: user_menu}">
   <div class="timeline row animate" ng-style="timelineStyle">
   	<div class="line col-md-8 col-md-offset-4 col-sm-10 col-sm-offset-2">
 	  	<div class="song" ng-repeat="(key,song) in songs" scroll-if="song.playing" ng-class="{first: key == 0, playing: song.playing, last: key == songs.length -1 && !user}">
@@ -47,67 +44,84 @@
 </div><!-- /.container -->
  <div id="menu" class="animate" ng-class="{active: sidebar}">
  	<div class="row">
-  	<div class="col-md-12 sidebar-offcanvas" id="sidebar" role="navigation">  
-          <a class="toggle-nav" ng-click="toggleSidebar()"><i class="fa fa-bars"></i></a>
-          <div class="playlist_info">
-          	<h1>{{playlist.title}}</h1>
-          	<h3>{{songs.length}} Songs</h3><h3>{{collectors.length}} Collectors</h3><h3>0 Listeners</h3>
-          	<input type="text" class="form-control" value="http://kollect.co/#/{{ playlist.key }}">
-          	<div class="clearfix"></div>
-          	<button class="btn btn-primary"><span class="fa fa-plus"></span>Add Song</button>
-          	<button class="btn btn-primary"><span class="fa fa-users"></span>Invite Friends</button>
-          </div>
-          <div class="collector_info">
-          	<span class="section_title">collectors</span>
-          	<div class="collector" ng-repeat="collector in collectors" >
-          		<div style="background-image: url('{{ collector.avatar }}');" class="collector_avatar" tooltip="{{ collector.username }}"  tooltip-trigger="mouseenter"></div>
-          	</div>
-          </div>
-          <div class="sidebar_player">
-          	<span class="section_title">now playing</span>
-  			<div class="cover">
-  				<img src="{{ track.cover }}"  />
-  			</div>
-  			<h3 class="title" ng-dblclick="play(key,true)" ng-click="play(key)" >{{ track.title }}</h3>
-  			<h4 class="artist">{{ track.artist }}</h4>
-  			<h4 class="time"><i class="fa fa-clock-o"></i>{{ track.duration | unix }}</h4>
-		  	<div class="pos">
-			  	<div class="player-pos-time">{{ outputTime }}</div>
-			  	<div class="player-pos-bar"></div>
-			  	<div class="player-pos animate" ng-style="positionStyle">
-		  			<div class="player-pos-dot"></div>
-		  		</div>
+	  	<div class="col-md-12 sidebar-offcanvas" id="sidebar" role="navigation">  
+	          <a class="toggle-nav" ng-click="toggleSidebar()"><i class="fa fa-bars"></i></a>
+	          <div class="playlist_info">
+	          	<h1>{{playlist.title}}</h1>
+	          	<h3>{{songs.length}} Songs</h3><h3>{{collectors.length}} Collectors</h3><h3>0 Listeners</h3>
+	          	<input type="text" class="form-control" value="http://kollect.co/#/{{ playlist.key }}">
+	          	<div class="clearfix"></div>
+	          	<button class="btn btn-primary"><span class="fa fa-plus"></span>Add Song</button>
+	          	<button class="btn btn-primary"><span class="fa fa-users"></span>Invite Friends</button>
+	          </div>
+	          <div class="collector_info">
+	          	<span class="section_title">collectors</span>
+	          	<div class="collector" ng-repeat="collector in collectors" >
+	          		<div style="background-image: url('{{ collector.avatar }}');" class="collector_avatar" tooltip="{{ collector.username }}"  tooltip-trigger="mouseenter"></div>
+	          	</div>
+	          </div>
+	          <div class="sidebar_player">
+	          	<span class="section_title">now playing</span>
+	  			<div class="cover">
+	  				<img src="{{ track.cover }}"  />
+	  			</div>
+	  			<h3 class="title" ng-dblclick="play(key,true)" ng-click="play(key)" >{{ track.title }}</h3>
+	  			<h4 class="artist">{{ track.artist }}</h4>
+	  			<h4 class="time"><i class="fa fa-clock-o"></i>{{ track.duration | unix }}</h4>
+			  	<div class="pos">
+				  	<div class="player-pos-time">{{ outputTime }}</div>
+				  	<div class="player-pos-bar"></div>
+				  	<div class="player-pos animate" ng-style="positionStyle">
+			  			<div class="player-pos-dot"></div>
+			  		</div>
 
-		  		<div class="player-pos-duration">{{ track.duration | unix }}</div>
-	  		</div>
-	  		<div class="player">
-		  		<span class="player_wrapper">
-			  		<div class="random" ng-click="toggleRandom()" ng-class="{active: random}"><i class="fa fa-random"></i></div>
-			  		<div  class="backward" ng-click="prevSong()"><i class="fa fa-backward"></i></div>
-			  		<div  class="play" ng-click="togglePlaying()"><i class="fa" ng-class="{'fa-pause': playing, 'fa-play': !playing}"></i></div>
-			  		<div  class="forward" ng-click="nextSong()"><i class="fa fa-forward"></i></div>
-			  		<div class="repeat" ng-click="toggleRepeat()" ng-class="{active: repeat}"><i class="fa fa-repeat"></i></div>
-		  		</span>
-	  		</div>
-          </div>
-          <div class="list-group hidden-lg">
-            <a href="#" class="list-group-item active">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-          </div>
-      </div>
+			  		<div class="player-pos-duration">{{ track.duration | unix }}</div>
+		  		</div>
+		  		<div class="player">
+			  		<span class="player_wrapper">
+				  		<div class="random" ng-click="toggleRandom()" ng-class="{active: random}"><i class="fa fa-random"></i></div>
+				  		<div  class="backward" ng-click="prevSong()"><i class="fa fa-backward"></i></div>
+				  		<div  class="play" ng-click="togglePlaying()"><i class="fa" ng-class="{'fa-pause': playing, 'fa-play': !playing}"></i></div>
+				  		<div  class="forward" ng-click="nextSong()"><i class="fa fa-forward"></i></div>
+				  		<div class="repeat" ng-click="toggleRepeat()" ng-class="{active: repeat}"><i class="fa fa-repeat"></i></div>
+			  		</span>
+		  		</div>
+	          </div>
+	    </div>
+ 	</div>
+  </div>
+
+  <div id="user_menu" class="animate" ng-class="{active: user_menu}" ng-show="user">
+ 	<div class="row">
+	  	<div class="col-md-12 sidebar-offcanvas" id="sidebar" role="navigation">  
+	          <a class="toggle-nav" ng-click="toggleUserMenu()"><i class="fa fa-user"></i></a>
+	          <div class="user_info">
+	          	
+	          	<div class="avatar" style="background-image: url('{{ user.avatar }}');"></div>
+	          	<h1>{{user.display_name}}</h1>
+	          	<div class="user-meta">
+	          		<a href="#" >Edit Profile</a>
+	          		<a 	ng-click="logout()">Logout</a>
+	          	</div>
+	          	<button class="btn btn-primary"><span class="fa fa-plus"></span>Create collection</button>
+	          	<button class="btn btn-primary"><span class="fa fa-users"></span>Invite Friends</button>
+	          </div>
+	          <div class="collections_info">
+	          	<span class="section_title">collections</span>
+	          	<div class="list-group collections">
+	          		<a href="#/{{collection.unique_key}}" class="list-group-item collection" ng-repeat="collection in collections" >
+	          			<i class="fa fa-file-audio-o"></i>
+	          			{{collection.title  }}
+	          			<span ng-show="collection.public == 1" class="label label-default">public</span>
+	          		</a>
+	          	</div>	
+	          </div>
+	    </div>
  	</div>
   </div>
   
   
-  <div id="footer-player" class="text-center animate" ng-class="{active: sidebar}">
+  <div id="footer-player" class="text-center animate" ng-class="{active: sidebar || user_menu }">
   		<div class="player-pos animate" ng-style="positionStyle">
   			<div class="player-pos-dot"></div>
   			<div class="player-pos-time">{{ outputTime }}</div>

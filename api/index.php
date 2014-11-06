@@ -19,7 +19,7 @@ $app->get('/playlists/:key', 'getPlaylistByKey');
 // Return: 
 // Gibt den Playlist Header plus die darin enthaltenen Songs zurück
 //
-$app->post('/playlists/:id','addSong');
+$app->post('/playlists/add/:id','addSong');
 //
 // Params:
 // url: Soundcloud URL des Songs
@@ -27,6 +27,14 @@ $app->post('/playlists/:id','addSong');
 //
 // Return: 
 // Gibt den Song zurück
+//
+$app->get('/playlists/user/:author_id','getPlaylistsFromUser');
+//
+// Params:
+// id:	User, von welchem die Plalists geladen werden sollen
+//
+// Return: 
+// Gibt die Liste der Playlists zurück des Users
 //
 $app->post('/playlists','newPlaylist');
 //
@@ -50,6 +58,7 @@ $app->post('/collector/:id','addCollectorPost');
 // Gibt den Benutzer zurück, der hinzugefügt werden soll
 //
 
+$app->get('/logout','logoutUser');
 $app->post('/login','loginUser');
 
 
@@ -84,6 +93,28 @@ function getPlaylistByKey($key) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
 }
+
+function getPlaylistsFromUser($author_id) {
+	$user_id = secureAction();
+	//if($author_id == $user_id) {
+		$sql = "SELECT playlist.id as id, playlist.posted as posted, playlist.author_id as author_id, playlist.title as title, playlist.unique_key as unique_key, playlist.public as public,( SELECT COUNT(id) FROM playlist_song WHERE playlist_id = playlist.id) as count FROM playlist WHERE author_id = :author_id ORDER BY posted DESC";
+	/*} else {
+		$sql = "SELECT playlist.id as id, playlist.posted as posted, playlist.author_id as author_id, playlist.title as title, playlist.unique_key as unique_key FROM playlist WHERE author_id = ':author_id' ORDER BY posted DESC";
+	}*/
+	
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);
+		$stmt->bindParam("author_id",$author_id);
+		$stmt->execute();
+		$wines = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo json_encode($wines);
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+
 
 function newPlaylist() {
 	$user_id = secureAction();
@@ -422,7 +453,7 @@ function deleteUser($id) {
 
 function getUserByLoginKey($key) {
 	secureAction();
-	$sql = "SELECT user.user_login as user_login, user.id as id, user.avatar as avatar FROM `ticket` JOIN user ON (ticket.user_id = user.id) WHERE ticket.uid = :uid";
+	$sql = "SELECT user.user_login as user_login, user.id as id, user.avatar as avatar, user.display_name as display_name FROM `ticket` JOIN user ON (ticket.user_id = user.id) WHERE ticket.uid = :uid";
 	try {
 		$db = getConnection();
 		$stmt = $db->prepare($sql);
@@ -436,9 +467,30 @@ function getUserByLoginKey($key) {
 	}
 }
 
+function logoutUser() {
+	if (isset($_COOKIE['ticket'])) {
+		//fetch the ticket from the db
+		$sql = "DELETE FROM ticket WHERE uid=:uid LIMIT 1";
+			try {
+				$db = getConnection();
+				$stmt = $db->prepare($sql);  
+				$stmt->bindParam("uid", $_COOKIE['ticket']);
+				$stmt->execute(); 
+				$db = null;
+
+				unset($_COOKIE['ticket']);
+  				setcookie('ticket', '', time() - 3600);
+
+			} catch(PDOException $e) {
+				echo '[{"error":{"text":'. $e->getMessage() .'}}]'; 
+			}
+	} else {
+		echo '{"error":{"text":"You cannot log out because you are not logged in."}}'; 
+	}
+}
+
 function loginUser() {
 	
-
 	$request = \Slim\Slim::getInstance()->request();
 	$user = json_decode($request->getBody());
 	
@@ -446,7 +498,7 @@ function loginUser() {
 	if (isset($user->name) && isset($user->password)) {
 		$password = md5($user->password.$user->name);
 		
-		$sql = "SELECT id,user_login,avatar FROM user WHERE  user_login=:username AND user_pass=:password LIMIT 1";
+		$sql = "SELECT id,user_login,avatar,display_name FROM user WHERE  user_login=:username AND user_pass=:password LIMIT 1";
 		try {
 			$db = getConnection();
 			$stmt = $db->prepare($sql);  
@@ -460,7 +512,7 @@ function loginUser() {
 				$ticket = array(
 					'uid' => uuidSecure(),
 					'user_id' => $response[0]->id,
-					'expires' => time() + 24 * 60 + 60
+					'expires' => time() + 24 * 60  * 60 + 60
 				);
 				
 				//Delete old tickets before creating a new one
@@ -547,7 +599,7 @@ function secureAction()
 			else {
 				//update if ticket has aged
 				if ($ticket[0]->expires - 10 * 60 < time()) {
-					$ticket[0]->expires = time() + 24 * 60 * 60;
+					$ticket[0]->expires = time() + 24 * 60 * 60 * 60;
 					$sql = "UPDATE ticket SET expires=".$ticket[0]->expires." WHERE uid=:uid";
 					try {
 						$db = getConnection();

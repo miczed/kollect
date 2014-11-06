@@ -49,7 +49,8 @@ Array.prototype.remove = function(from, to) {
 kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$http,$routeParams, smoothScroll,$modal,$cookies) {
     
     $scope.soundcloud = true; //Debug Variable, falls Soundcloud Down ist
-    $scope.sidebar = true; //Sidebar aktiv oder nicht
+    $scope.sidebar = false; //Sidebar aktiv oder nicht
+    $scope.user_menu = false;
     $scope.random = false; //Shuffle Modus aktiv oder nicht
     $scope.repeat = false; //Repeat Modus aktiv oder nicht
     $scope.playing = false; //Abspielen oder nicht
@@ -66,6 +67,8 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
 	$scope.newSong = {}; 
 	$scope.playlist = {};
 	$scope.collectors = {};
+	$scope.collections = {};
+	$scope.order = Array();
 	$scope.alerts = Array();
 	if(!$routeParams.playlistKey) {
 		$routeParams.playlistKey = "test";
@@ -79,6 +82,7 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
     if($scope.ticket) {
 	    $http.get('api/cookie/' + $scope.ticket).success(function(data) {
 	    	$scope.user = data;
+	    	$scope.loadCollections();
 	   })
    }
     
@@ -88,29 +92,18 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
     	$scope.playlist.key = data.unique_key;
     	$scope.originalSongs = data.songs;
 		$scope.songs = data.songs;
-		$scope.orderNormal(); 
-		$scope.play($scope.orderId);
-		data.songs.forEach(function(song) {
-			var data = $scope.getSCInfo(song.sc_id);
-		})
+		//$scope.order = $scope.songs;
+		if($scope.songs.length > 0) {
+			$scope.orderNormal(); 
+			$scope.play($scope.orderId);
+		}
    }).
   error(function(data, status, headers, config) {
     // called asynchronously if an error occurs
     // or server returns response with an error status.
   });	
 	
-	
-	$scope.originalSongs = [
-{title:'Satellites (Tritonal Remix)',artist:'Cash Cash', length: '3:41', cover: 'http://placehold.it/110x110', avatar: 'http://placehold.it/44x44', user: 'Michael Ziörjen', time:'2 days ago', playing: true, 'sc-id': 172419376},
-{title:'Mario - Let Me Love You (Sllash Remix)',artist:'Sllash', length: '3:41', cover: 'http://placehold.it/110x110', avatar: 'http://placehold.it/44x44', user: 'Michael Ziörjen', time:'3 days ago', playing: false, 'sc-id': 107142078},
-{title:'Faded',artist:'ZHU', length: '3:41', cover: 'http://placehold.it/110x110', avatar: 'http://placehold.it/44x44', user: 'Fabrizio Füchslin', time:'3 days ago', playing: false, 'sc-id': 138712428 },
-{title:'Savior (Original Mix)',artist:'Tom Swoon Feat. Ruby Prophet', length: '3:41', cover: 'http://placehold.it/110x110', avatar: 'http://placehold.it/44x44', user: 'Fabrizio Füchslin', time:'4 days ago', playing: false, 'sc-id': 173023203 },
-{title:'Sunburst (Original Mix) [Out November 10]',artist:'Mako', length: '3:41', cover: 'http://placehold.it/110x110', avatar: 'http://placehold.it/44x44', user: 'Fabrizio Füchslin', time:'5 days ago', playing: false, 'sc-id': 173008932 },
-{title:'MYNGA feat. Cosmo Klein - Back Home ...',artist:'Thomas Jack', length: '3:41', cover: 'http://placehold.it/110x110', avatar: 'http://placehold.it/44x44', user: 'Sacha Fuchs', time:'6 days ago', playing: false, 'sc-id': 173010274 },
-{title:'Heart Keeps On Dancing',artist:'James Gruntz', length: '3:41', cover: 'http://placehold.it/110x110', avatar: 'http://placehold.it/44x44', user: 'Michael Ziörjen', time:'7 days ago', playing: false, 'sc-id': 173010274 }]
     
-    $scope.songs = $scope.originalSongs;
-    $scope.order = [];
     
     $scope.shuffle = function(o){ //v1.0
     	for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -137,6 +130,11 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
     
     $scope.toggleSidebar = function() {
           $scope.sidebar = $scope.sidebar === false ? true: false;
+          $scope.user_menu = false;
+    };
+     $scope.toggleUserMenu = function() {
+          $scope.user_menu = $scope.user_menu === false ? true: false;
+          $scope.sidebar = false;
     };
     $scope.toggleRepeat = function() {
           $scope.repeat = $scope.repeat === false ? true: false;
@@ -167,6 +165,8 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
     	if(play_song) {
 	    	$scope.playing = true;
     	}
+    	console.log("LOAD SONG WIHT ID: " + value);
+    	console.log($scope.songs);
     	$scope.songs[$scope.loadedId].playing = false;
     	$scope.loadedId = value;
     	console.log("Playing Song #" + value);
@@ -262,12 +262,15 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
 	
 	    modalInstance.result.then(function (user) {
 	      $scope.user = user;
+
+	      $scope.loadCollections();
+
 	    }, function () {
 	      $log.info('Modal dismissed at: ' + new Date());
 	    });
 	};
 	$scope.addSongBtn = function() {
-	    $http.post('api/playlists/1', $scope.newSong).success(function(data){
+	    $http.post('api/playlists/add/1', $scope.newSong).success(function(data){
 	      if(data.error) {
 		      $scope.alerts.push({ msg: data.error.text, type: 'danger' });
 	      } else if(data.song_id) {
@@ -285,4 +288,22 @@ kollectControllers.controller("mainCtrl", function($scope,$interval,$filter,$htt
 	$scope.closeAlert = function(index) {
     	$scope.alerts.splice(index, 1);
 	};
+
+	$scope.logout = function() {
+		$scope.user = false; //Aktuell eingeloggter Benutzer
+		$scope.user_menu = false;
+		$http.get('api/logout/').success(function(data) {
+	   })
+	}
+
+	$scope.loadCollections = function() {
+		console.log('loadCollections');
+		$http.get('api/playlists/user/' + $scope.user.id).success(function(data) {
+			$scope.collections = data;
+			console.log(data);
+		}).error(function(data, status, headers, config) {
+    		// called asynchronously if an error occurs
+    		// or server returns response with an error status.
+  		});
+	}
 });

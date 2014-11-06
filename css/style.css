@@ -40,8 +40,9 @@ a:hover,
 a:focus {
   outline: none; }
 
-body {
-  font-family: 'Roboto', sans-serif; }
+html, body {
+  font-family: 'Roboto', sans-serif;
+  overflow-x: hidden; }
 
 #alerts {
   position: fixed;
@@ -52,7 +53,7 @@ body {
   z-index: 100; }
 
 .playlist_info {
-  margin: 45px;
+  margin: 40px;
   float: left; }
 
 .playlist_info h1 {
@@ -90,6 +91,51 @@ body {
   color: white;
   background-color: rgba(0, 0, 0, 0.2); }
 
+.user_info {
+  margin: 30px;
+  float: left; }
+
+.user_info h1 {
+  color: white;
+  font-weight: 300;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: 5px;
+  float: left;
+  width: 250px; }
+
+.user_info .avatar {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  border-radius: 100px;
+  float: left; }
+
+.user_info .user-meta {
+  float: left;
+  margin-left: 20px;
+  margin-bottom: 35px;
+  margin-right: 40px; }
+
+.user_info .user-meta a {
+  font-size: 14px;
+  color: #979797;
+  letter-spacing: 0px;
+  font-weight: 300;
+  font-family: 'Roboto', sans-serif;
+  clear: both;
+  float: left; }
+
+.user_info .btn {
+  margin-right: 20px;
+  margin-top: 5px; }
+
+.user_info .btn + .btn {
+  margin-right: 0px; }
+
 .collector_info {
   clear: both;
   background: rgba(255, 255, 255, 0.05);
@@ -98,7 +144,7 @@ body {
   width: 100%;
   position: relative; }
 
-.section_title {
+#menu .section_title {
   text-transform: uppercase;
   float: right;
   text-align: right;
@@ -109,12 +155,64 @@ body {
   font-weight: bold;
   letter-spacing: 1px; }
 
+#user_menu .section_title {
+  text-transform: uppercase;
+  float: left;
+  text-align: left;
+  top: 20px;
+  left: 30px;
+  position: absolute;
+  color: #CECECE;
+  font-weight: bold;
+  letter-spacing: 1px; }
+
+.collections_info {
+  clear: both;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  float: left;
+  width: 100%;
+  position: relative;
+  padding-top: 50px; }
+
+.collections_info .collections {
+  margin-bottom: 0px;
+  border-radius: 0px; }
+
+.collections_info .collection {
+  background: transparent;
+  font-size: 14px;
+  color: #CECECE;
+  line-height: 16px;
+  letter-spacing: 1.5px;
+  border: 0px;
+  border-radius: 0px;
+  padding: 6px 0px; }
+
+.collections_info .collection:hover {
+  background: transparent;
+  color: white; }
+
+.collections_info .collection i {
+  margin-right: 3px; }
+
+.collections_info .collection .label {
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px 5px;
+  top: -1px;
+  position: relative;
+  left: 5px;
+  font-size: 10px; }
+
 .collector_info .collector {
   float: left;
   margin-right: 15px;
   margin-top: 15px;
   width: 45px;
-  height: 45px; }
+  height: 45px;
+  padding: 6px 0px; }
 
 .collector_info .collector_avatar {
   width: 45px;
@@ -309,7 +407,8 @@ body {
   background: transparent;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 13px; }
+  font-size: 12px;
+  padding: 10px 13px; }
 
 .btn.btn-primary .fa {
   color: #FF5A5A; }
@@ -347,10 +446,38 @@ body {
   -ms-transform: translateX(-480px);
   transform: translateX(-480px); }
 
-.menu-link {
+#menu .menu-link {
   position: absolute;
   top: 15px;
   left: -50px; }
+
+#user_menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 450px;
+  left: -450px;
+  height: 100%;
+  -webkit-transform: translateX(0px);
+  -moz-transform: translateX(0px);
+  -o-transform: translateX(0px);
+  -ms-transform: translateX(0px);
+  transform: translateX(0px);
+  background: #2A313B; }
+
+#user_menu.active {
+  -webkit-transform: translateX(450px);
+  -moz-transform: translateX(450px);
+  -o-transform: translateX(450px);
+  -ms-transform: translateX(450px);
+  transform: translateX(450px); }
+
+#user_menu .toggle-nav {
+  position: absolute;
+  right: -25px;
+  top: 10px;
+  font-size: 20px;
+  color: black; }
 
 #site {
   -webkit-transform: translateX(0px);
@@ -359,12 +486,19 @@ body {
   -ms-transform: translateX(0px);
   transform: translateX(0px); }
 
-#site.active {
+#site.active_left {
   -webkit-transform: translateX(-300px);
   -moz-transform: translateX(-300px);
   -o-transform: translateX(-300px);
   -ms-transform: translateX(-300px);
   transform: translateX(-300px); }
+
+#site.active_right {
+  -webkit-transform: translateX(250px);
+  -moz-transform: translateX(250px);
+  -o-transform: translateX(250px);
+  -ms-transform: translateX(250px);
+  transform: translateX(250px); }
 
 #user-meta {
   position: fixed;
@@ -378,7 +512,7 @@ body {
 #user-meta a {
   color: black; }
 
-.toggle-nav {
+#menu .toggle-nav {
   position: absolute;
   left: -25px;
   top: 10px;
